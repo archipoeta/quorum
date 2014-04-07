@@ -60,14 +60,14 @@
 				</Label>
 
 				<EditBox name="$(parent)MotionBody" inherits="ZO_DefaultEditMultiLineForBackdrop" font="ZoFontGame" color="CFDCBD" wrapMode="ELLIPSIS" editEnabled="true" multiLine="true" hidden="true">
-					<Dimensions x="200" y="100" />
+					<Dimensions x="280" y="200" />
 					<Anchor offsetX="5" offsetY="140" />
 				</EditBox>
 				<Label name="$(parent)MotionBodyOK" font="ZoFontGame" color="55FF55" wrapMode="ELLIPSIS" verticalAlignment="BOTTOM" horizontalAlignment="RIGHT" text="OK" hidden="true">
-                    <Anchor offsetX="165" offsetY="240" />
+                    <Anchor offsetX="165" offsetY="250" />
                 </Label>				
 				<Label name="$(parent)MotionBodyCANCEL" font="ZoFontGame" color="FF5555" wrapMode="ELLIPSIS" verticalAlignment="BOTTOM" horizontalAlignment="RIGHT" text="Cancel" hidden="true">
-                    <Anchor offsetX="205" offsetY="240" />
+                    <Anchor offsetX="205" offsetY="250" />
                 </Label>
 				
 				<Label name="$(parent)About" font="ZoFontGame" color="CFDCBD" wrapMode="ELLIPSIS" verticalAlignment="BOTTOM" horizontalAlignment="RIGHT" text="About" mouseEnabled="true">

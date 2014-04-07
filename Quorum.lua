@@ -116,10 +116,10 @@ local function QShowActions( actions )
 			control:SetText(key)
 			control:SetHandler( "OnMouseDown", function() QHandleMotion(key, value) end )
 			control:SetHandler( "OnMouseEnter", function()
-				control:SetStyleColor(0,0,128,1)
+				control:SetColor(0,1,0,1)
 			end )
 			control:SetHandler( "OnMouseExit", function()
-				control:SetStyleColor(240,240,240,0)
+				control:SetColor(240,240,240,1)
 			end )
 		else
 			local control = wm:GetControlByName( delta_y )
@@ -146,7 +146,7 @@ end
 function QShowMainMotions()
 	local motions = {
 		["1. Stand to Speak"] = "*SEEKS RECOGNITION OF THE CHAIR*",	
-		["2. I move to/that"] = "MOTION TO/THAT...",
+		["2. I move to/that"] = "MOTION TO/THAT... ",
 		["3. Second a Motion"] = "SECONDED.",
 	}
 
