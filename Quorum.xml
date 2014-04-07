@@ -1,11 +1,11 @@
 <GuiXml>
-    <Controls>
-        <TopLevelControl name="Quorum" mouseEnabled="true" movable="true">
-            <Dimensions x="300" y="300" />
-            <Anchor point="CENTER" />
+	<Controls>
+		<TopLevelControl name="Quorum" mouseEnabled="true" movable="true">
+			<Dimensions x="300" y="300" />
+			<Anchor point="CENTER" />
  
-            <Controls>
-                <Backdrop name="$(parent)BG" inherits="ZO_DefaultBackdrop" />
+			<Controls>
+				<Backdrop name="$(parent)BG" inherits="ZO_DefaultBackdrop" />
 				<Label name="Title" text="Quorum" verticalAlignment="TOP" font="ZoFontWindowTitle">
 					<AnchorFill/>
 				</Label>
@@ -17,45 +17,45 @@
 				<Label name="Section0" text="Main" verticalAlignment="CENTER" font="ZoFontGame" color="FFDDFF" mouseEnabled="true">
 					<Anchor offsetX="5" offsetY="60" />
 					<OnMouseDown>
-						QShowMainMotions()
+						Q.ShowMainMotions()
 					</OnMouseDown>
 				</Label>
 				<Label name="Section1" text="Priv" verticalAlignment="CENTER" font="ZoFontGame" color="FFDDFF" mouseEnabled="true">
 					<Anchor offsetX="60" offsetY="60" />
 					<OnMouseDown>
-						QShowPrivMotions()
+						Q.ShowPrivMotions()
 					</OnMouseDown>
 				</Label>
 				<Label name="Section2" text="Sub" verticalAlignment="CENTER" font="ZoFontGame" color="DDFFFF" mouseEnabled="true">
 					<Anchor offsetX="110" offsetY="60" />
 					<OnMouseDown>
-						QShowSubMotions()
+						Q.ShowSubMotions()
 					</OnMouseDown>
 				</Label>
 				<Label name="Section3" text="Incident" verticalAlignment="CENTER" font="ZoFontGame" color="FFDDDD" mouseEnabled="true">
 					<Anchor offsetX="155" offsetY="60" />
 					<OnMouseDown>
-						QShowIncidentMotions()
+						Q.ShowIncidentMotions()
 					</OnMouseDown>
 				</Label>
 				<Label name="Section4" text="Other" verticalAlignment="CENTER" font="ZoFontGame" color="DDDDFF" mouseEnabled="true">
 					<Anchor offsetX="230" offsetY="60" />
 					<OnMouseDown>
-						QShowOtherMotions()
+						Q.ShowOtherMotions()
 					</OnMouseDown>
 				</Label>
 
 				<Label name="Section5" text="Voting" verticalAlignment="BOTTOM" font="ZoFontGame" color="DDDDFF" mouseEnabled="true">
 					<Anchor offsetX="5" offsetY="280" />
 					<OnMouseDown>
-						QShowVotingActions()
+						Q.ShowVotingActions()
 					</OnMouseDown>
 				</Label>
 
 				<Label name="Section6" text="Chair" verticalAlignment="BOTTOM" font="ZoFontGame" color="DDDDFF" mouseEnabled="true">
 					<Anchor offsetX="75" offsetY="280" />
 					<OnMouseDown>
-						QShowChairActions()
+						Q.ShowChairActions()
 					</OnMouseDown>
 				</Label>
 
@@ -64,19 +64,19 @@
 					<Anchor offsetX="5" offsetY="140" />
 				</EditBox>
 				<Label name="$(parent)MotionBodyOK" font="ZoFontGame" color="55FF55" wrapMode="ELLIPSIS" verticalAlignment="BOTTOM" horizontalAlignment="RIGHT" text="OK" hidden="true">
-                    <Anchor offsetX="165" offsetY="250" />
-                </Label>				
+					<Anchor offsetX="165" offsetY="250" />
+				</Label>				
 				<Label name="$(parent)MotionBodyCANCEL" font="ZoFontGame" color="FF5555" wrapMode="ELLIPSIS" verticalAlignment="BOTTOM" horizontalAlignment="RIGHT" text="Cancel" hidden="true">
-                    <Anchor offsetX="205" offsetY="250" />
-                </Label>
+					<Anchor offsetX="205" offsetY="250" />
+				</Label>
 				
 				<Label name="$(parent)About" font="ZoFontGame" color="CFDCBD" wrapMode="ELLIPSIS" verticalAlignment="BOTTOM" horizontalAlignment="RIGHT" text="About" mouseEnabled="true">
-                    <Anchor offsetX="250" offsetY="280" />
+					<Anchor offsetX="250" offsetY="280" />
 					<OnMouseDown>
-						QShowHelpMenu()
+						Q.ShowHelpMenu()
 					</OnMouseDown>
-                </Label>
-            </Controls>
-        </TopLevelControl>
-    </Controls>
+				</Label>
+			</Controls>
+		</TopLevelControl>
+	</Controls>
 </GuiXml>
