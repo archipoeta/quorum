@@ -415,7 +415,7 @@ function Q.OnMessageReceived(event_code, message_type, from_name, text)
 			Q.quora[guild_id].speaker = from_name
 			Q.quora[guild_id].motion_body = message
 
-			Notify:SetText( guild_id .. ": " .. message )
+			Notify:SetText( "/g" .. guild_id .. ": " .. message )
 		--elseif ( message == "" ) then
 		
 		elseif ( string.find( message, "YEA." ) ) then
@@ -448,9 +448,9 @@ function Q.OnMessageReceived(event_code, message_type, from_name, text)
 		end
 
 		if ( Q.quora[guild_id].speaker == Q.character_name ) then
-			Notify:SetText( guild_id .. ": " .. "|c66FF66You have the floor!|r" )
+			Notify:SetText( "/g" .. guild_id .. ": " .. "|c66FF66You have the floor!|r" )
 		else
-			Notify:SetText( guild_id .. ": " .. "|cFF6666You do not have the floor.|r" )
+			Notify:SetText( "/g" .. guild_id .. ": " .. "|cFF6666You do not have the floor.|r" )
 		end
 --		SpamFilter.Debug("Validating message from "..fromName.." at "..tostring(GetTimeStamp()))
 --		local ruleBroken = RuleBroken(fromName, text)
