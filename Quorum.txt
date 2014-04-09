@@ -1,4 +1,6 @@
-## Title: Quorum
+## Title: |cDA77FFQuorum|r
+## Author: Archpoet
+## Version: 1.0.4
 ## APIVersion: 100003
 
 Quorum.lua
