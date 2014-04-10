@@ -276,7 +276,8 @@ function Q.ShowMainMotions()
 		{ "1.\t\t I move to/that", "I MOVE THAT ... " },
 		{ "2.\t\t Second a Motion", "SECONDED." },
 		{ "3.\t\t Yield the Floor", "I YIELD." },
-		{ "4.\t\t Withdraw Your Motion", "MOTION TO WITHDRAW." },
+		{ "4.\t\t Skip Debate, Vote", "MOTION TO ADOPT." },		
+		{ "5.\t\t Withdraw Your Motion", "MOTION TO WITHDRAW." },
 		{ Q.info },
 	}
 
@@ -347,7 +348,7 @@ function Q.ShowChairAnswers()
 		{ "2.\t\t Point Accepted", "YOUR POINT IS WELL TAKEN." },
 		{ "3.\t\t Point Denied", "YOUR POINT IS NOT WELL TAKEN." },
 		{ "4.\t\t Motion Succeeds", "MOTION CARRIED." },
-		{ "5.\t\t Motion Fails", "MOTION DENIED." },		
+		{ "5.\t\t Motion Fails", "MOTION LOST." },		
 		{ "6.\t\t Sustain Objection", "SUSTAINED." },
 		{ "7.\t\t Overrule Objection", "OVERRULED." },
 	}
