@@ -4,9 +4,9 @@ Quorum
 A Meeting/Voting/Quorum add-on for ESO (The Elder Scrolls Online)
 
 Commands:
+
 	/quo
 		- Toggle Add-On visibility
-
 	/g1invite [character_name]
 		- Invite a player to the guild in position 1 (i.e. /g1 )
 	/g2invite [character_name]
