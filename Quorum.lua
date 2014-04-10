@@ -11,7 +11,7 @@ local wm = WINDOW_MANAGER
 Q.version = "1.0.4"
 
 function Q.init()
-	Q.character_name = GetDisplayName()
+	Q.account_name = GetDisplayName()
 	Q.quora = {}
 
 	Q.guild_names = {
@@ -52,6 +52,8 @@ function Q.init()
 				move = 0,
 				motion_body = "",
 				player_rank = rank,
+				notify_text = "No Meeting.",
+				floor_queue = {},
 			}
 		end
 	end
@@ -136,6 +138,9 @@ function Q.HandleMotion( key, value )
 		end
 				
 		Q.ShowSummary(value)
+	elseif ( string.find( key, 'Recognize Speaker' ) ) then
+		local first = Q.quora[ Q.active_guild ].floor_queue[1]
+		ZO_ChatWindowTextEntryEditBox:SetText( "/g" .. Q.active_guild .. " " .. Q.format_regex .. "|cDA77FF" .. value .. "|r" .. first )
 	elseif ( string.find( key, 'I move to' ) ) then
 		for i = 3, 10, 1 do
 			if ( wm:GetControlByName( i ) ) then
@@ -162,7 +167,7 @@ function Q.HandleMotion( key, value )
 	else
 		if not ( value == 0 ) then
 			CHAT_SYSTEM:AddMessage(value)
-			ZO_ChatWindowTextEntryEditBox:SetText( "/g" .. Q.active_guild .. Q.format_regex .. "|cDA77FF" .. value .. "|r" )
+			ZO_ChatWindowTextEntryEditBox:SetText( "/g" .. Q.active_guild .. " " .. Q.format_regex .. "|cDA77FF" .. value .. "|r" )
 		end		
 	end
 end
@@ -189,7 +194,7 @@ function Q.MotionBodyOK(ok, cancel, control)
 	cancel:SetHidden(true)
 	
 	CHAT_SYSTEM:AddMessage(text)
-	ZO_ChatWindowTextEntryEditBox:SetText( "/g" .. Q.active_guild .. Q.format_regex .. "|cDA77FF" .. text .. "|r" )
+	ZO_ChatWindowTextEntryEditBox:SetText( "/g" .. Q.active_guild .. " " .. Q.format_regex .. "|cDA77FF" .. text .. "|r" )
 	
 	Q.ShowMainMotions()
 end
@@ -427,59 +432,68 @@ function Q.ShowSummary( guild )
 			Section9.hidden = false			
 		end
 
-		if ( v.meeting_in_progress == false ) then
-			--Q.ShowActions( { { "No Meeting currently in session.", 0 } } )
-			Notify:SetText( "No Meeting." )
-		end
+		Notify:SetText( Q.quora[guild].notify_text )
+		
 	end
 end
 
 -- parse lines of guild chat to watch for votes,motions,etc.
 function Q.OnMessageReceived(event_code, message_type, from_name, text)
 	local guild_id = Q.IsIn(message_type, Q.guild_channels)
-	if ( guild_id and string.find( text, Q.format_regex ) ) then
+	
+	if not ( guild_id == false ) then
+	if ( string.find( text, Q.format_regex ) ) then
 		--CHAT_SYSTEM:AddMessage( "Text matched the output of this add-on: " .. text )
 		local message = text:gsub( Q.format_regex, "" )
-		
+
 		if ( string.find( message, "CALL TO ORDER." ) ) then
 			Quorum:SetHidden(false)
 			Quorum.hidden = false		
-
+			d(type(from_name) )
+			d( type(Q.account_name) )
 			Q.quora[guild_id].meeting_in_progress = true
 			Q.quora[guild_id].chair = from_name
 			Q.quora[guild_id].speaker = from_name
 			Q.quora[guild_id].motion_body = message
-
-			Notify:SetText( "/g" .. guild_id .. ": " .. message )
-		elseif ( string.find( message, "THE CHAIR RECOGNIZES" ) ) then
-			local name = string.match( message, ": (.*)")
-			Q.quora[guild_id].speaker = name
+			--Q.quora[guild_id].notify_text = "/g" .. guild_id .. ": " .. message
+		elseif ( string.find( message, "SEEKS RECOGNITION" ) ) then
+			table.insert( Q.quora[guild_id].floor_queue, from_name )
+		elseif ( string.find( message, "THE CHAIR RECOGNIZES : " ) ) then
+			local first = Q.quora[ guild_id ].floor_queue[1]
+			table.remove( Q.quora[ guild_id ].floor_queue, 1 )
+			Q.quora[ guild_id ].speaker = first
+--			local name = string.match( message, ":(.+)")
+--			d(type(from_name) )
+--			name = name:gsub("^%s*(%S+)%s*$", "%1")
+--			d( type(name) )
+--			d( type(Q.account_name) )
+--			Q.quora[guild_id].speaker = name
 		elseif ( string.find( message, "QUESTION HAS BEEN CALLED" ) ) then
-			Notify:SetText( "/g" .. guild_id .. ": " .. "Vote to close debate on this question." )
+			Q.quora[guild_id].notify_text = "/g" .. guild_id .. ": " .. "Vote to close debate on this question."
 			Q.quora[guild_id].speaker = "N/A"
 
 		elseif ( string.find( message, "QUESTION HAS BEEN PUT" ) ) then
 			Q.quora[guild_id].vote_in_progress = true
-			Notify:SetText( "/g" .. guild_id .. ": " .. "Vote on Main Motion." )
+			Q.quora[guild_id].notify_text = "/g" .. guild_id .. ": " .. "Vote on Main Motion."
 			Q.quora[guild_id].speaker = "N/A"			
 
 		elseif ( string.find( message, "YEA." ) ) then
-			if ( Q.quora[guild_id].votes.yea[ Q.character_name ] == nil ) then
-				Q.quora[guild_id].votes.yea[ Q.character_name ] = 1
-				Q.quora[guild_id].votes.nay[ Q.character_name ] = nil
-				Q.quora[guild_id].votes.abs[ Q.character_name ] = nil
+			if ( Q.quora[guild_id].votes.yea[ Q.account_name ] == nil ) then
+				Q.quora[guild_id].votes.yea[ Q.account_name ] = 1
+				Q.quora[guild_id].votes.nay[ Q.account_name ] = nil
+				Q.quora[guild_id].votes.abs[ Q.account_name ] = nil
 			end
 		elseif ( string.find( message, "NAY." ) ) then
-			if ( Q.quora[guild_id].votes.nay[ Q.character_name ] == nil ) then
-				Q.quora[guild_id].votes.nay[ Q.character_name ] = 1
-				Q.quora[guild_id].votes.yea[ Q.character_name ] = nil
-				Q.quora[guild_id].votes.abs[ Q.character_name ] = nil				
+			if ( Q.quora[guild_id].votes.nay[ Q.account_name ] == nil ) then
+				Q.quora[guild_id].votes.nay[ Q.account_name ] = 1
+				Q.quora[guild_id].votes.yea[ Q.account_name ] = nil
+				Q.quora[guild_id].votes.abs[ Q.account_name ] = nil				
 			end		
 		elseif ( string.find( message, "I ABSTAIN." ) ) then
-			if ( Q.quora[guild_id].votes.abs[ Q.character_name ] == nil ) then
-				Q.quora[guild_id].votes.abs[ Q.character_name ] = 1
-				Q.quora[guild_id].votes.yea[ Q.character_name ] = nil
-				Q.quora[guild_id].votes.nay[ Q.character_name ] = nil
+			if ( Q.quora[guild_id].votes.abs[ Q.account_name ] == nil ) then
+				Q.quora[guild_id].votes.abs[ Q.account_name ] = 1
+				Q.quora[guild_id].votes.yea[ Q.account_name ] = nil
+				Q.quora[guild_id].votes.nay[ Q.account_name ] = nil
 			end		
 		elseif ( string.find( message, "MEETING IS ADJOURNED." ) ) then
 			Q.quora[guild_id].meeting_in_progress = false
@@ -495,31 +509,21 @@ function Q.OnMessageReceived(event_code, message_type, from_name, text)
 			Q.quora[guild_id].speaker = "N/A"
 			Q.quora[guild_id].move = 0
 			Q.quora[guild_id].motion_body = message
-		else
+		elseif ( string.find( message, "I MOVE THAT|MOTION TO" ) ) then
 			Q.quora[guild_id].motion_body = message
 		end
 
-		if ( Q.quora[guild_id].speaker == Q.character_name ) then
-			Notify:SetText( "/g" .. guild_id .. ": " .. "|c66FF66You have the floor!|r" )
-		else
-			Notify:SetText( "/g" .. guild_id .. ": " .. "|cFF6666You do not have the floor.|r" )
+	end
+
+		if ( guild_id == Q.active_guild ) then
+			if ( Q.account_name == tostring( Q.quora[guild_id].speaker ) ) then
+				Q.quora[guild_id].notify_text = "/g" .. guild_id .. ": " .. "|c66FF66You have the floor!|r"
+			else
+				Q.quora[guild_id].notify_text = "/g" .. guild_id .. ": " .. "|cFF6666You do not have the floor.|r"
+			end		
+			Notify:SetText( Q.quora[guild_id].notify_text )
 		end
---		SpamFilter.Debug("Validating message from "..fromName.." at "..tostring(GetTimeStamp()))
---		local ruleBroken = RuleBroken(fromName, text)
---		if (not IsIgnored(fromName) and ruleBroken ~= nil) then
---			-- Queue the player to be ignored ...
---			SpamFilter.ignoreQueue[fromName] = true
-			
---			if not SpamFilter.ignoreQueueRunning then
---				zo_callLater(ProcessIgnoreQueue, 1);
---				SpamFilter.ignoreQueueRunning = true
---			end
-			
-			-- ... and queue the note to be set (since this is updated after event processing)
---			SpamFilter.noteNew = string.format(SpamFilter.EmitStrings.note, ruleBroken, GetDateStringFromTimestamp(GetTimeStamp()), GetTimeString())
-			
---			SpamFilter.Emit(string.format(SpamFilter.EmitStrings.filtered, fromName, ruleBroken))
---		end
+	
 	end
 end
 
