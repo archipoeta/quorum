@@ -72,6 +72,41 @@ function Q.AddSlashCommands()
 			Quorum.hidden = true
 		end
 	end
+	SLASH_COMMANDS["/g1invite"] = function(extra)
+		if ( extra == nil or extra == "" ) then
+			return p("Please provide the name of someone to invite")
+		else
+			GuildInvite( 1, tostring(extra) )
+		end
+	end
+	SLASH_COMMANDS["/g2invite"] = function(extra)
+		if ( extra == nil or extra == "" ) then
+			return p("Please provide the name of someone to invite")
+		else
+			GuildInvite( 2, tostring(extra) )
+		end
+	end
+	SLASH_COMMANDS["/g3invite"] = function(extra)
+		if ( extra == nil or extra == "" ) then
+			return p("Please provide the name of someone to invite")
+		else
+			GuildInvite( 3, tostring(extra) )
+		end
+	end
+	SLASH_COMMANDS["/g4invite"] = function(extra)
+		if ( extra == nil or extra == "" ) then
+			return p("Please provide the name of someone to invite")
+		else
+			GuildInvite( 4, tostring(extra) )
+		end
+	end
+	SLASH_COMMANDS["/g5invite"] = function(extra)
+		if ( extra == nil or extra == "" ) then
+			return p("Please provide the name of someone to invite")
+		else
+			GuildInvite( 5, tostring(extra) )
+		end
+	end	
 end
 
 function Q.ElementHoverOn(element, rgb)
@@ -101,12 +136,7 @@ function Q.HandleMotion( key, value )
 		end
 				
 		Q.ShowSummary(value)
-	elseif not ( string.find( key, 'I move to' ) ) then
-		if not ( value == 0 ) then
-			CHAT_SYSTEM:AddMessage(value)
-			ZO_ChatWindowTextEntryEditBox:SetText( Q.format_regex .. "|cDA77FF" .. value .. "|r" )
-		end
-	else
+	elseif ( string.find( key, 'I move to' ) ) then
 		for i = 3, 10, 1 do
 			if ( wm:GetControlByName( i ) ) then
 				local control = wm:GetControlByName( i )
@@ -129,6 +159,11 @@ function Q.HandleMotion( key, value )
 		
 		ok:SetHandler( "OnMouseDown", function() Q.MotionBodyOK(ok, cancel, control) end )
 		cancel:SetHandler( "OnMouseDown", function() Q.MotionBodyCANCEL(ok, cancel, control) end )
+	else
+		if not ( value == 0 ) then
+			CHAT_SYSTEM:AddMessage(value)
+			ZO_ChatWindowTextEntryEditBox:SetText( "/g" .. Q.active_guild .. Q.format_regex .. "|cDA77FF" .. value .. "|r" )
+		end		
 	end
 end
 
@@ -154,7 +189,7 @@ function Q.MotionBodyOK(ok, cancel, control)
 	cancel:SetHidden(true)
 	
 	CHAT_SYSTEM:AddMessage(text)
-	ZO_ChatWindowTextEntryEditBox:SetText( Q.format_regex .. text)
+	ZO_ChatWindowTextEntryEditBox:SetText( "/g" .. Q.active_guild .. Q.format_regex .. "|cDA77FF" .. text .. "|r" )
 	
 	Q.ShowMainMotions()
 end
@@ -233,7 +268,7 @@ end
 
 function Q.ShowMainMotions()
 	local motions = {
-		{ "1.\t\t I move to/that", "MOTION TO/THAT... " },
+		{ "1.\t\t I move to/that", "I MOVE THAT ... " },
 		{ "2.\t\t Second a Motion", "SECONDED." },
 		{ "3.\t\t Yield the Floor", "I YIELD." },
 		{ "4.\t\t Withdraw Your Motion", "MOTION TO WITHDRAW." },
@@ -293,7 +328,7 @@ end
 function Q.ShowChairActions()
 	local motions = {
 		{ "1.\t\t Begin Meeting", "CALL TO ORDER." },
-		{ "2.\t\t Recognize Speaker", "THE CHAIR RECOGNIZES " },
+		{ "2.\t\t Recognize Speaker", "THE CHAIR RECOGNIZES : " },
 		{ "3.\t\t Recess Meeting", "MEETING IS IN RECESS." },
 		{ "4.\t\t End Meeting", "MEETING IS ADJOURNED." },
 	}
@@ -416,8 +451,18 @@ function Q.OnMessageReceived(event_code, message_type, from_name, text)
 			Q.quora[guild_id].motion_body = message
 
 			Notify:SetText( "/g" .. guild_id .. ": " .. message )
-		--elseif ( message == "" ) then
-		
+		elseif ( string.find( message, "THE CHAIR RECOGNIZES" ) ) then
+			local name = string.match( message, ": (.*)")
+			Q.quora[guild_id].speaker = name
+		elseif ( string.find( message, "QUESTION HAS BEEN CALLED" ) ) then
+			Notify:SetText( "/g" .. guild_id .. ": " .. "Vote to close debate on this question." )
+			Q.quora[guild_id].speaker = "N/A"
+
+		elseif ( string.find( message, "QUESTION HAS BEEN PUT" ) ) then
+			Q.quora[guild_id].vote_in_progress = true
+			Notify:SetText( "/g" .. guild_id .. ": " .. "Vote on Main Motion." )
+			Q.quora[guild_id].speaker = "N/A"			
+
 		elseif ( string.find( message, "YEA." ) ) then
 			if ( Q.quora[guild_id].votes.yea[ Q.character_name ] == nil ) then
 				Q.quora[guild_id].votes.yea[ Q.character_name ] = 1
@@ -436,7 +481,14 @@ function Q.OnMessageReceived(event_code, message_type, from_name, text)
 				Q.quora[guild_id].votes.yea[ Q.character_name ] = nil
 				Q.quora[guild_id].votes.nay[ Q.character_name ] = nil
 			end		
-		elseif ( string.find( message, "MEETING ADJOURNED." ) ) then
+		elseif ( string.find( message, "MEETING IS ADJOURNED." ) ) then
+			Q.quora[guild_id].meeting_in_progress = false
+			Q.quora[guild_id].vote_in_progress = false
+			Q.quora[guild_id].chair = "N/A"
+			Q.quora[guild_id].speaker = "N/A"
+			Q.quora[guild_id].move = 0
+			Q.quora[guild_id].motion_body = message
+		elseif ( string.find( message, "MEETING IS IN RECESS." ) ) then
 			Q.quora[guild_id].meeting_in_progress = false
 			Q.quora[guild_id].vote_in_progress = false
 			Q.quora[guild_id].chair = "N/A"
