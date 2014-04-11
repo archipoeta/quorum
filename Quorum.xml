@@ -4,17 +4,17 @@
 			<Dimensions x="360" y="300" />
 			<Anchor point="CENTER" />
 			<OnInitialized>
-				Q.ShowSummary()			
+				Q.show_summary()			
 			</OnInitialized>
 			<Controls>
 				<Backdrop name="$(parent)BG" inherits="ZO_DefaultBackdrop" />
 				<Label name="QClose" text="[x]" verticalAlignment="TOP" font="ZoFontGame" color="CFDCBD" mouseEnabled="true">
 					<Anchor offsetX="340" offsetY="0" />
 					<OnMouseEnter>
-						Q.ElementHoverOn(QClose, Q.close_hover_color)
+						Q.element_hover_on(QClose, Q.close_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.ElementHoverOff(QClose, Q.default_color)
+						Q.element_hover_off(QClose, Q.default_color)
 					</OnMouseExit>
 					<OnMouseDown>
 						Quorum:SetHidden(true)
@@ -24,33 +24,33 @@
 				<Label name="Title" text="Quorum" verticalAlignment="TOP" font="ZoFontWindowTitle" color="CFDCBD" mouseEnabled="true">
 					<Anchor offsetX="2" offsetY="0" />
 					<OnMouseEnter>
-						Q.ElementHoverOn(Title, Q.title_hover_color)
+						Q.element_hover_on(Title, Q.title_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.ElementHoverOff(Title, Q.default_color)
+						Q.element_hover_off(Title, Q.default_color)
 					</OnMouseExit>
 					<OnMouseDown>
-						Q.ShowSummary()
+						Q.show_summary()
 					</OnMouseDown>
 				</Label>
 				
 				<Button name="ReqSpeaker" inherits="ZO_DefaultButton" text="Speak" mouseEnabled="true" color="FFDDDD">
 					<Anchor offsetX="130" offsetY="5" />
 					<OnMouseDown>
-						Q.HandleMotion( "Stand to Speak", "*SEEKS RECOGNITION OF THE CHAIR*" )
+						Q.handle_motion( "Stand to Speak", "*SEEKS RECOGNITION OF THE CHAIR*" )
 					</OnMouseDown>
 				</Button>				
 				
 				<Label name="Section0" text="Motions: " verticalAlignment="CENTER" font="ZoFontGame" color="CFDCBD" mouseEnabled="true">
 					<Anchor offsetX="285" offsetY="45" />
 					<OnMouseEnter>
-						Q.ElementHoverOn(Section0, Q.title_hover_color)
+						Q.element_hover_on(Section0, Q.title_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.ElementHoverOff(Section0, Q.default_color)
+						Q.element_hover_off(Section0, Q.default_color)
 					</OnMouseExit>
 					<OnMouseDown>
-						Q.ShowSummary()
+						Q.show_summary()
 					</OnMouseDown>
 				</Label>
 				<Label name="Notify" text="" verticalAlignment="BOTTOM" font="ZoFontGame" color="CFDCBD">
@@ -60,111 +60,111 @@
 				<Label name="Section1" text="Main" verticalAlignment="CENTER" font="ZoFontGame" color="FFDDFF" mouseEnabled="true">
 					<Anchor offsetX="300" offsetY="69" />
 					<OnMouseEnter>
-						Q.ElementHoverOn(Section1, Q.tab_hover_color)
+						Q.element_hover_on(Section1, Q.tab_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.ElementHoverOff(Section1, Q.tab_colors[1])
+						Q.element_hover_off(Section1, Q.tab_colors[1])
 					</OnMouseExit>
 					<OnMouseDown>
-						Q.ShowMainMotions()
+						Q.show_main_motions()
 					</OnMouseDown>
 				</Label>
 				<Label name="Section2" text="Priv" verticalAlignment="CENTER" font="ZoFontGame" color="FFDDFF" mouseEnabled="true">
 					<Anchor offsetX="300" offsetY="94" />
 					<OnMouseEnter>
-						Q.ElementHoverOn(Section2, Q.tab_hover_color)
+						Q.element_hover_on(Section2, Q.tab_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.ElementHoverOff(Section2, Q.tab_colors[2])
+						Q.element_hover_off(Section2, Q.tab_colors[2])
 					</OnMouseExit>
 					<OnMouseDown>
-						Q.ShowPrivMotions()
+						Q.show_priv_motions()
 					</OnMouseDown>
 				</Label>
 				<Label name="Section3" text="Sub" verticalAlignment="CENTER" font="ZoFontGame" color="DDFFFF" mouseEnabled="true">
 					<Anchor offsetX="300" offsetY="119" />
 					<OnMouseEnter>
-						Q.ElementHoverOn(Section3, Q.tab_hover_color)
+						Q.element_hover_on(Section3, Q.tab_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.ElementHoverOff(Section3, Q.tab_colors[3])
+						Q.element_hover_off(Section3, Q.tab_colors[3])
 					</OnMouseExit>
 					<OnMouseDown>
-						Q.ShowSubMotions()
+						Q.show_sub_motions()
 					</OnMouseDown>
 				</Label>
 				<Label name="Section4" text="Incident" verticalAlignment="CENTER" font="ZoFontGame" color="FFDDDD" mouseEnabled="true">
 					<Anchor offsetX="300" offsetY="144" />
 					<OnMouseEnter>
-						Q.ElementHoverOn(Section4, Q.tab_hover_color)
+						Q.element_hover_on(Section4, Q.tab_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.ElementHoverOff(Section4, Q.tab_colors[4])
+						Q.element_hover_off(Section4, Q.tab_colors[4])
 					</OnMouseExit>
 					<OnMouseDown>
-						Q.ShowIncidentMotions()
+						Q.show_incident_motions()
 					</OnMouseDown>
 				</Label>
 				<Label name="Section5" text="Other" verticalAlignment="CENTER" font="ZoFontGame" color="DDDDFF" mouseEnabled="true">
 					<Anchor offsetX="300" offsetY="169" />
 					<OnMouseEnter>
-						Q.ElementHoverOn(Section5, Q.tab_hover_color)
+						Q.element_hover_on(Section5, Q.tab_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.ElementHoverOff(Section5, Q.tab_colors[5])
+						Q.element_hover_off(Section5, Q.tab_colors[5])
 					</OnMouseExit>
 					<OnMouseDown>
-						Q.ShowOtherMotions()
+						Q.show_other_motions()
 					</OnMouseDown>
 				</Label>
 
 				<Label name="Section6" text="Voting" verticalAlignment="BOTTOM" font="ZoFontGame" color="DDDDFF" mouseEnabled="true">
 					<Anchor offsetX="300" offsetY="194" />
 					<OnMouseEnter>
-						Q.ElementHoverOn(Section6, Q.tab_hover_color)
+						Q.element_hover_on(Section6, Q.tab_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.ElementHoverOff(Section6, Q.tab_colors[6])
+						Q.element_hover_off(Section6, Q.tab_colors[6])
 					</OnMouseExit>
 					<OnMouseDown>
-						Q.ShowVotingActions()
+						Q.show_voting_actions()
 					</OnMouseDown>
 				</Label>
 
 				<Label name="Section7" text="*Chair" verticalAlignment="BOTTOM" font="ZoFontGame" color="DDFFFF" mouseEnabled="true">
 					<Anchor offsetX="300" offsetY="219" />
 					<OnMouseEnter>
-						Q.ElementHoverOn(Section7, Q.tab_hover_color)
+						Q.element_hover_on(Section7, Q.tab_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.ElementHoverOff(Section7, Q.tab_colors[3])
+						Q.element_hover_off(Section7, Q.tab_colors[3])
 					</OnMouseExit>
 					<OnMouseDown>
-						Q.ShowChairActions()
+						Q.show_chair_actions()
 					</OnMouseDown>
 				</Label>
 				<Label name="Section8" text="*ChairQ" verticalAlignment="BOTTOM" font="ZoFontGame" color="FFDDFF" mouseEnabled="true">
 					<Anchor offsetX="300" offsetY="244" />
 					<OnMouseEnter>
-						Q.ElementHoverOn(Section8, Q.tab_hover_color)
+						Q.element_hover_on(Section8, Q.tab_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.ElementHoverOff(Section8, Q.tab_colors[2])
+						Q.element_hover_off(Section8, Q.tab_colors[2])
 					</OnMouseExit>
 					<OnMouseDown>
-						Q.ShowChairQuestions()
+						Q.show_chair_questions()
 					</OnMouseDown>
 				</Label>
 				<Label name="Section9" text="*ChairA" verticalAlignment="BOTTOM" font="ZoFontGame" color="FFDDDD" mouseEnabled="true">
 					<Anchor offsetX="300" offsetY="269" />
 					<OnMouseEnter>
-						Q.ElementHoverOn(Section9, Q.tab_hover_color)
+						Q.element_hover_on(Section9, Q.tab_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.ElementHoverOff(Section9, Q.tab_colors[4])
+						Q.element_hover_off(Section9, Q.tab_colors[4])
 					</OnMouseExit>
 					<OnMouseDown>
-						Q.ShowChairAnswers()
+						Q.show_chair_answers()
 					</OnMouseDown>
 				</Label>				
 				
@@ -182,13 +182,13 @@
 				<Label name="$(parent)About" font="ZoFontGame" color="CFDCBD" wrapMode="ELLIPSIS" verticalAlignment="BOTTOM" horizontalAlignment="RIGHT" text="[a]" mouseEnabled="true">
 					<Anchor offsetX="320" offsetY="0" />
 					<OnMouseEnter>
-						Q.ElementHoverOn(QuorumAbout, Q.tab_hover_color)
+						Q.element_hover_on(QuorumAbout, Q.tab_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.ElementHoverOff(QuorumAbout, Q.default_color)
+						Q.element_hover_off(QuorumAbout, Q.default_color)
 					</OnMouseExit>					
 					<OnMouseDown>
-						Q.ShowHelpMenu()
+						Q.show_help_menu()
 					</OnMouseDown>
 				</Label>
 			</Controls>

@@ -64,7 +64,7 @@ function Q.init_saved_vars()
 	Q.quora = ZO_SavedVars:NewAccountWide( "Quorum_SavedVariables", 1, "quora", Q.quora )
 end
 
-function Q.AddSlashCommands()
+function Q.add_slash_commands()
 	SLASH_COMMANDS["/quo"] = function()
 		if ( Quorum.hidden ) then
 			Quorum:SetHidden(false)
@@ -74,48 +74,50 @@ function Q.AddSlashCommands()
 			Quorum.hidden = true
 		end
 	end
-	SLASH_COMMANDS["/g1invite"] = function(extra)
-		if ( extra == nil or extra == "" ) then
-			return p("Please provide the name of someone to invite")
-		else
-			GuildInvite( 1, tostring(extra) )
-		end
-	end
-	SLASH_COMMANDS["/g2invite"] = function(extra)
-		if ( extra == nil or extra == "" ) then
-			return p("Please provide the name of someone to invite")
-		else
-			GuildInvite( 2, tostring(extra) )
-		end
-	end
-	SLASH_COMMANDS["/g3invite"] = function(extra)
-		if ( extra == nil or extra == "" ) then
-			return p("Please provide the name of someone to invite")
-		else
-			GuildInvite( 3, tostring(extra) )
-		end
-	end
-	SLASH_COMMANDS["/g4invite"] = function(extra)
-		if ( extra == nil or extra == "" ) then
-			return p("Please provide the name of someone to invite")
-		else
-			GuildInvite( 4, tostring(extra) )
-		end
-	end
-	SLASH_COMMANDS["/g5invite"] = function(extra)
-		if ( extra == nil or extra == "" ) then
-			return p("Please provide the name of someone to invite")
-		else
-			GuildInvite( 5, tostring(extra) )
-		end
-	end	
+
+	SLASH_COMMANDS["/gdemote"]		= function (extra) Q.guild_demote( Q.active_guild, extra) end
+	SLASH_COMMANDS["/ginvite"]		= function (extra) Q.guild_invite( Q.active_guild, extra) end
+	SLASH_COMMANDS["/gkick"]		= function (extra) Q.guild_remove( Q.active_guild, extra) end
+	SLASH_COMMANDS["/gpromote"]		= function (extra) Q.guild_promote( Q.active_guild, extra) end
+	SLASH_COMMANDS["/gquit"]		= function (extra) Q.guild_leave( Q.active_guild ) end
+
+	SLASH_COMMANDS["/g1demote"]		= function (extra) Q.guild_demote( 1, extra) end
+	SLASH_COMMANDS["/g1invite"]		= function (extra) Q.guild_invite( 1, extra) end
+	SLASH_COMMANDS["/g1kick"]		= function (extra) Q.guild_remove( 1, extra) end
+	SLASH_COMMANDS["/g1promote"]	= function (extra) Q.guild_promote( 1, extra) end
+	SLASH_COMMANDS["/g1quit"]		= function (extra) Q.guild_leave( 1 ) end
+	
+	SLASH_COMMANDS["/g2demote"]		= function (extra) Q.guild_demote( 2, extra) end
+	SLASH_COMMANDS["/g2invite"]		= function (extra) Q.guild_invite( 2, extra) end
+	SLASH_COMMANDS["/g2kick"]		= function (extra) Q.guild_remove( 2, extra) end
+	SLASH_COMMANDS["/g2promote"]	= function (extra) Q.guild_promote( 2, extra) end
+	SLASH_COMMANDS["/g2quit"]		= function (extra) Q.guild_leave( 2 ) end
+	
+	SLASH_COMMANDS["/g3demote"]		= function (extra) Q.guild_demote( 3, extra) end
+	SLASH_COMMANDS["/g3invite"]		= function (extra) Q.guild_invite( 3, extra) end
+	SLASH_COMMANDS["/g3kick"]		= function (extra) Q.guild_remove( 3, extra) end
+	SLASH_COMMANDS["/g3promote"]	= function (extra) Q.guild_promote( 3, extra) end
+	SLASH_COMMANDS["/g3quit"]		= function (extra) Q.guild_leave( 3 ) end
+	
+	SLASH_COMMANDS["/g4demote"]		= function (extra) Q.guild_demote( 4, extra) end
+	SLASH_COMMANDS["/g4invite"]		= function (extra) Q.guild_invite( 4, extra) end
+	SLASH_COMMANDS["/g4kick"]		= function (extra) Q.guild_remove( 4, extra) end
+	SLASH_COMMANDS["/g4promote"]	= function (extra) Q.guild_promote( 4, extra) end
+	SLASH_COMMANDS["/g4quit"]		= function (extra) Q.guild_leave( 4 ) end
+	
+	SLASH_COMMANDS["/g5demote"]		= function (extra) Q.guild_demote( 5, extra) end
+	SLASH_COMMANDS["/g5invite"]		= function (extra) Q.guild_invite( 5, extra) end
+	SLASH_COMMANDS["/g5kick"]		= function (extra) Q.guild_remove( 5, extra) end	
+	SLASH_COMMANDS["/g5promote"]	= function (extra) Q.guild_promote( 5, extra) end
+	SLASH_COMMANDS["/g5quit"]		= function (extra) Q.guild_leave( 5 ) end
+
 end
 
-function Q.ElementHoverOn(element, rgb)
+function Q.element_hover_on(element, rgb)
 	element:SetColor( rgb[1]/255, rgb[2]/255, rgb[3]/255, 1 )
 end
 
-function Q.ElementHoverOff(element, rgb)
+function Q.element_hover_off(element, rgb)
 	element:SetColor( rgb[1]/255, rgb[2]/255, rgb[3]/255, 1 )
 end
 
@@ -125,8 +127,44 @@ function Q.get_table_length(T)
   return count
 end
 
-function Q.HandleMotion( key, value )
-	if ( string.find( key, 'Guild:\t' ) ) then
+function Q.guild_demote( guild, player )
+	if ( player == nil or player == "" ) then
+		return d("Please provide the name of a guild member to demote.")
+	else
+		GuildDemote( guild, tostring(player) )
+	end
+end
+
+function Q.guild_invite( guild, player )
+	if ( player == nil or player == "" ) then
+		return d("Please provide the name of someone to invite.")
+	else
+		GuildInvite( guild, tostring(player) )
+	end
+end
+
+function Q.guild_leave( guild )
+	GuildLeave( guild )
+end
+
+function Q.guild_promote( guild, player )
+	if ( player == nil or player == "" ) then
+		return d("Please provide the name of a guild member to promote.")
+	else
+		GuildPromote( guild, tostring(player) )
+	end
+end
+
+function Q.guild_remove( guild, player )
+	if ( player == nil or player == "" ) then
+		return d("Please provide the name of a guild member to remove.")
+	else
+		GuildRemove( guild, tostring(player) )
+	end
+end
+
+function Q.handle_motion( key, value )
+	if ( string.find( key, 'Active:\t' ) ) then
 		if ( value > 5 ) then
 			value = 1
 		elseif ( value ~= 5 ) then
@@ -137,7 +175,7 @@ function Q.HandleMotion( key, value )
 			value = 1
 		end
 				
-		Q.ShowSummary(value)
+		Q.show_summary(value)
 	elseif ( string.find( key, 'Recognize Speaker' ) ) then
 		local first = Q.quora[ Q.active_guild ].floor_queue[1]
 		ZO_ChatWindowTextEntryEditBox:SetText( "/g" .. Q.active_guild .. " " .. Q.format_regex .. "|cDA77FF" .. value .. "|r" .. first )
@@ -196,7 +234,7 @@ function Q.MotionBodyOK(ok, cancel, control)
 	CHAT_SYSTEM:AddMessage(text)
 	ZO_ChatWindowTextEntryEditBox:SetText( "/g" .. Q.active_guild .. " " .. Q.format_regex .. "|cDA77FF" .. text .. "|r" )
 	
-	Q.ShowMainMotions()
+	Q.show_main_motions()
 end
 
 function Q.MotionBodyCANCEL(ok, cancel, control)
@@ -205,24 +243,10 @@ function Q.MotionBodyCANCEL(ok, cancel, control)
 	ok:SetHidden(true)
 	cancel:SetHidden(true)
 	
-	Q.ShowMainMotions()
+	Q.show_main_motions()
 end
 
-function Q.PairsByKeys(t, f)
-	local a = {}
-	for n in pairs(t) do table.insert(a, n) end
-	table.sort(a, f)
-	local i = 0
-	local iter = function ()
-		i = i + 1
-		if a[i] == nil then return nil
-		else return a[i], t[a[i]]
-		end
-	end
-	return iter
-end
-
-function Q.ShowActions( actions )
+function Q.show_actions( actions )
 	for j = 1, 10, 1 do
 		if ( wm:GetControlByName( j ) ) then
 			local control = wm:GetControlByName( j )
@@ -242,7 +266,7 @@ function Q.ShowActions( actions )
 				control:SetMouseEnabled(true)
 				control:SetFont("ZoFontGame")
 				control:SetText(actions[i][1])
-				control:SetHandler( "OnMouseDown", function() Q.HandleMotion(actions[i][1], actions[i][2]) end )
+				control:SetHandler( "OnMouseDown", function() Q.handle_motion(actions[i][1], actions[i][2]) end )
 				control:SetHandler( "OnMouseEnter", function()
 					control:SetColor(0,1,0,1)
 				end )
@@ -252,14 +276,14 @@ function Q.ShowActions( actions )
 			else
 				local control = wm:GetControlByName( i )
 				control:SetText(actions[i][1])
-				control:SetHandler( "OnMouseDown", function() Q.HandleMotion(actions[i][1], actions[i][2]) end )
+				control:SetHandler( "OnMouseDown", function() Q.handle_motion(actions[i][1], actions[i][2]) end )
 			end
 		end
 		delta_y = delta_y + 25
 	end
 end
 
-function Q.ShowHelpMenu()
+function Q.show_help_menu()
 	local motions = {
 		{ "\t\t Title: Quroum", 0 },
 		{ "\t\t Desc: Meeting Add-On for ESO", 0 },
@@ -268,10 +292,10 @@ function Q.ShowHelpMenu()
 		{ "\t\t http://imperialsenate.org/forum", 0 },
 	}
 
-	Q.ShowActions( motions )
+	Q.show_actions( motions )
 end
 
-function Q.ShowMainMotions()
+function Q.show_main_motions()
 	local motions = {
 		{ "1.\t\t I move to/that", "I MOVE THAT ... " },
 		{ "2.\t\t Second a Motion", "SECONDED." },
@@ -281,10 +305,10 @@ function Q.ShowMainMotions()
 		{ Q.info },
 	}
 
-	Q.ShowActions( motions )
+	Q.show_actions( motions )
 end
 
-function Q.ShowPrivMotions()
+function Q.show_priv_motions()
 	local motions = {
 		{ "1.\t\t Close Meeting", "MOTION TO ADJOURN." },
 		{ "2.\t\t Take A Break", "MOTION TO RECESS." },
@@ -292,10 +316,10 @@ function Q.ShowPrivMotions()
 		{ "4.\t\t Follow Agenda", "CALL FOR THE ORDERS OF THE DAY." },
 	}
 
-	Q.ShowActions( motions )
+	Q.show_actions( motions )
 end
 
-function Q.ShowSubMotions()
+function Q.show_sub_motions()
 	local motions = {
 		{ "1.\t\t Skip Motion", "MOTION TO TABLE THE QUESTION." },
 		{ "2.\t\t Close Debate and Vote", "MOTION TO THE PREVIOUS QUESTION." },
@@ -304,10 +328,10 @@ function Q.ShowSubMotions()
 		{ "4.\t\t Substitute Motion", "MOTION TO SUBSTITUTE." },
 	}
 
-	Q.ShowActions( motions )
+	Q.show_actions( motions )
 end
 
-function Q.ShowIncidentMotions()
+function Q.show_incident_motions()
 	local motions = {
 		{ "1.\t\t Get Information", "POINT OF INFORMATION." },
 		{ "2.\t\t Enforce Rules", "POINT OF ORDER." },
@@ -317,10 +341,10 @@ function Q.ShowIncidentMotions()
 		{ "6.\t\t Split Motion into Parts", "MOTION TO DIVIDE THE QUESTION." },
 	}
 
-	Q.ShowActions( motions )
+	Q.show_actions( motions )
 end
 
-function Q.ShowOtherMotions()
+function Q.show_other_motions()
 	local motions = {
 		{ "1.\t\t Reconsider skipped Motion", "MOTION TO TAKE FROM THE TABLE." },
 		{ "2.\t\t Reconsider voted Motion", "MOTION TO RECONSIDER." },
@@ -328,10 +352,10 @@ function Q.ShowOtherMotions()
 		{ "4.\t\t Amend carried/voted Motion", "MOTION TO AMEND." },
 	}
 	
-	Q.ShowActions( motions )
+	Q.show_actions( motions )
 end
 
-function Q.ShowChairActions()
+function Q.show_chair_actions()
 	local motions = {
 		{ "1.\t\t Begin Meeting", "CALL TO ORDER." },
 		{ "2.\t\t Recognize Speaker", "THE CHAIR RECOGNIZES : " },
@@ -339,10 +363,10 @@ function Q.ShowChairActions()
 		{ "4.\t\t End Meeting", "MEETING IS ADJOURNED." },
 	}
 	
-	Q.ShowActions( motions )
+	Q.show_actions( motions )
 end
 
-function Q.ShowChairAnswers()
+function Q.show_chair_answers()
 	local motions = {
 		{ "1.\t\t Enforce Order", "POINT OF ORDER." },
 		{ "2.\t\t Point Accepted", "YOUR POINT IS WELL TAKEN." },
@@ -353,10 +377,10 @@ function Q.ShowChairAnswers()
 		{ "7.\t\t Overrule Objection", "OVERRULED." },
 	}
 	
-	Q.ShowActions( motions )
+	Q.show_actions( motions )
 end
 
-function Q.ShowChairQuestions()
+function Q.show_chair_questions()
 	local motions = {
 		{ "1.\t\t Any Seconds?", "MOTION ON THE FLOOR, DO I HEAR A SECOND?" },
 		{ "2.\t\t Open Debate on a Motion", "IT HAS BEEN MOVED AND SECONDED, IS THERE ANY DISCUSSION?" },
@@ -366,28 +390,26 @@ function Q.ShowChairQuestions()
 		{ "6.\t\t Ask speaker to yield", "WILL YOU YIELD THE FLOOR?" },
 	}
 	
-	Q.ShowActions( motions )
+	Q.show_actions( motions )
 end
 
-function Q.ShowVotingActions()
+function Q.show_voting_actions()
 	local motions = {
 		{ "1.\t\t Yes", "YEA." },
 		{ "2.\t\t No", "NAY." },
 		{ "3.\t\t Abstain from Voting", "I ABSTAIN." },
 	}
 	
-	Q.ShowActions( motions )
+	Q.show_actions( motions )
 end
 
-function Q.ShowSummary( guild )
+function Q.show_summary( guild )
 	for j = 1, 10, 1 do
 		if ( wm:GetControlByName( j ) ) then
 			local control = wm:GetControlByName( j )
 			control:SetText("")
 		end
 	end
-
-	local meetings = {}
 
 	if ( guild == nil ) or ( guild == 0 ) then
 		if not ( Q.active_guild == nil ) then
@@ -398,24 +420,22 @@ function Q.ShowSummary( guild )
 	end
 
 	Q.active_guild = guild
+	SetDisplayedGuild( Q.active_guild )
 
 	local meeting_count = 0
 	local v = Q.quora[guild]
 
 	if ( v ~= nil and type(v) == "table" ) then
-		--if ( v.meeting_in_progress == true ) then
-			--meeting_count = meeting_count + 1
-			Q.ShowActions( {
-				{ "Guild:\t\t " .. tostring(v.guild_name) .. "\t\t>>", guild },
-				{ "Meeting Now:\t\t " .. tostring(v.meeting_in_progress), 0 },
-				{ "Chair:\t\t " .. tostring(v.chair), 0 },
-				{ "Floor:\t\t " .. tostring(v.speaker), 0 },
-				{ "Move:\t\t "  .. tostring(v.move), 0 },
-				{ "Question:\t\t " .. tostring(v.motion_body), 0 },
-				{ "Voting Now:\t\t " .. tostring(v.vote_in_progress), 0 },
-				{ "Votes:\t\t " .. tostring( Q.get_table_length(v.votes.yea) ) .. " / " .. tostring( Q.get_table_length(v.votes.nay) ) .. " / " .. tostring( Q.get_table_length(v.votes.abs) ), 0 },
-			} )
-		--end
+		Q.show_actions( {
+			{ "Active:\t\t |cAAFF99" .. tostring(v.guild_name) .. "|r\t\t>>", guild },
+			{ "Meeting Now:\t\t " .. tostring(v.meeting_in_progress), 0 },
+			{ "Chair:\t\t " .. tostring(v.chair), 0 },
+			{ "Floor:\t\t " .. tostring(v.speaker), 0 },
+			{ "Move:\t\t "  .. tostring(v.move), 0 },
+			{ "Question:\t\t " .. tostring(v.motion_body), 0 },
+			{ "Voting Now:\t\t " .. tostring(v.vote_in_progress), 0 },
+			{ "Votes:\t\t " .. tostring( Q.get_table_length(v.votes.yea) ) .. " / " .. tostring( Q.get_table_length(v.votes.nay) ) .. " / " .. tostring( Q.get_table_length(v.votes.abs) ), 0 },
+		} )
 
 		if ( v.player_rank > 2 ) or ( v.player_rank == nil ) then
 			Section7:SetHidden(true)
@@ -439,82 +459,73 @@ function Q.ShowSummary( guild )
 end
 
 -- parse lines of guild chat to watch for votes,motions,etc.
-function Q.OnMessageReceived(event_code, message_type, from_name, text)
+function Q.on_message_received(event_code, message_type, from_name, text)
 	local guild_id = Q.IsIn(message_type, Q.guild_channels)
 	
 	if not ( guild_id == false ) then
-	if ( string.find( text, Q.format_regex ) ) then
-		--CHAT_SYSTEM:AddMessage( "Text matched the output of this add-on: " .. text )
-		local message = text:gsub( Q.format_regex, "" )
+		if ( string.find( text, Q.format_regex ) ) then
 
-		if ( string.find( message, "CALL TO ORDER." ) ) then
-			Quorum:SetHidden(false)
-			Quorum.hidden = false		
-			d(type(from_name) )
-			d( type(Q.account_name) )
-			Q.quora[guild_id].meeting_in_progress = true
-			Q.quora[guild_id].chair = from_name
-			Q.quora[guild_id].speaker = from_name
-			Q.quora[guild_id].motion_body = message
-			--Q.quora[guild_id].notify_text = "/g" .. guild_id .. ": " .. message
-		elseif ( string.find( message, "SEEKS RECOGNITION" ) ) then
-			table.insert( Q.quora[guild_id].floor_queue, from_name )
-		elseif ( string.find( message, "THE CHAIR RECOGNIZES : " ) ) then
-			local first = Q.quora[ guild_id ].floor_queue[1]
-			table.remove( Q.quora[ guild_id ].floor_queue, 1 )
-			Q.quora[ guild_id ].speaker = first
---			local name = string.match( message, ":(.+)")
---			d(type(from_name) )
---			name = name:gsub("^%s*(%S+)%s*$", "%1")
---			d( type(name) )
---			d( type(Q.account_name) )
---			Q.quora[guild_id].speaker = name
-		elseif ( string.find( message, "QUESTION HAS BEEN CALLED" ) ) then
-			Q.quora[guild_id].notify_text = "/g" .. guild_id .. ": " .. "Vote to close debate on this question."
-			Q.quora[guild_id].speaker = "N/A"
+			local message = text:gsub( Q.format_regex, "" )
 
-		elseif ( string.find( message, "QUESTION HAS BEEN PUT" ) ) then
-			Q.quora[guild_id].vote_in_progress = true
-			Q.quora[guild_id].notify_text = "/g" .. guild_id .. ": " .. "Vote on Main Motion."
-			Q.quora[guild_id].speaker = "N/A"			
+			if ( string.find( message, "CALL TO ORDER." ) ) then
+				Quorum:SetHidden(false)
+				Quorum.hidden = false		
 
-		elseif ( string.find( message, "YEA." ) ) then
-			if ( Q.quora[guild_id].votes.yea[ Q.account_name ] == nil ) then
-				Q.quora[guild_id].votes.yea[ Q.account_name ] = 1
-				Q.quora[guild_id].votes.nay[ Q.account_name ] = nil
-				Q.quora[guild_id].votes.abs[ Q.account_name ] = nil
+				Q.quora[guild_id].meeting_in_progress = true
+				Q.quora[guild_id].chair = from_name
+				Q.quora[guild_id].speaker = from_name
+				Q.quora[guild_id].motion_body = message
+				--Q.quora[guild_id].notify_text = "/g" .. guild_id .. ": " .. message
+			elseif ( string.find( message, "SEEKS RECOGNITION" ) ) then
+				table.insert( Q.quora[guild_id].floor_queue, from_name )
+			elseif ( string.find( message, "THE CHAIR RECOGNIZES : " ) ) then
+				local first = Q.quora[ guild_id ].floor_queue[1]
+				table.remove( Q.quora[ guild_id ].floor_queue, 1 )
+				Q.quora[ guild_id ].speaker = first
+			elseif ( string.find( message, "QUESTION HAS BEEN CALLED" ) ) then
+				Q.quora[guild_id].notify_text = "/g" .. guild_id .. ": " .. "Vote to close debate on this question."
+				Q.quora[guild_id].speaker = "N/A"
+			elseif ( string.find( message, "QUESTION HAS BEEN PUT" ) ) then
+				Q.quora[guild_id].vote_in_progress = true
+				Q.quora[guild_id].notify_text = "/g" .. guild_id .. ": " .. "Vote on Main Motion."
+				Q.quora[guild_id].speaker = "N/A"			
+			elseif ( string.find( message, "YEA." ) ) then
+				if ( Q.quora[guild_id].votes.yea[ Q.account_name ] == nil ) then
+					Q.quora[guild_id].votes.yea[ Q.account_name ] = 1
+					Q.quora[guild_id].votes.nay[ Q.account_name ] = nil
+					Q.quora[guild_id].votes.abs[ Q.account_name ] = nil
+				end
+			elseif ( string.find( message, "NAY." ) ) then
+				if ( Q.quora[guild_id].votes.nay[ Q.account_name ] == nil ) then
+					Q.quora[guild_id].votes.nay[ Q.account_name ] = 1
+					Q.quora[guild_id].votes.yea[ Q.account_name ] = nil
+					Q.quora[guild_id].votes.abs[ Q.account_name ] = nil				
+				end
+			elseif ( string.find( message, "I ABSTAIN." ) ) then
+				if ( Q.quora[guild_id].votes.abs[ Q.account_name ] == nil ) then
+					Q.quora[guild_id].votes.abs[ Q.account_name ] = 1
+					Q.quora[guild_id].votes.yea[ Q.account_name ] = nil
+					Q.quora[guild_id].votes.nay[ Q.account_name ] = nil
+				end
+			elseif ( string.find( message, "MEETING IS ADJOURNED." ) ) then
+				Q.quora[guild_id].meeting_in_progress = false
+				Q.quora[guild_id].vote_in_progress = false
+				Q.quora[guild_id].chair = "N/A"
+				Q.quora[guild_id].speaker = "N/A"
+				Q.quora[guild_id].move = 0
+				Q.quora[guild_id].motion_body = message
+			elseif ( string.find( message, "MEETING IS IN RECESS." ) ) then
+				Q.quora[guild_id].meeting_in_progress = false
+				Q.quora[guild_id].vote_in_progress = false
+				Q.quora[guild_id].chair = "N/A"
+				Q.quora[guild_id].speaker = "N/A"
+				Q.quora[guild_id].move = 0
+				Q.quora[guild_id].motion_body = message
+			elseif ( string.find( message, "I MOVE THAT|MOTION TO" ) ) then
+				Q.quora[guild_id].motion_body = message
 			end
-		elseif ( string.find( message, "NAY." ) ) then
-			if ( Q.quora[guild_id].votes.nay[ Q.account_name ] == nil ) then
-				Q.quora[guild_id].votes.nay[ Q.account_name ] = 1
-				Q.quora[guild_id].votes.yea[ Q.account_name ] = nil
-				Q.quora[guild_id].votes.abs[ Q.account_name ] = nil				
-			end		
-		elseif ( string.find( message, "I ABSTAIN." ) ) then
-			if ( Q.quora[guild_id].votes.abs[ Q.account_name ] == nil ) then
-				Q.quora[guild_id].votes.abs[ Q.account_name ] = 1
-				Q.quora[guild_id].votes.yea[ Q.account_name ] = nil
-				Q.quora[guild_id].votes.nay[ Q.account_name ] = nil
-			end		
-		elseif ( string.find( message, "MEETING IS ADJOURNED." ) ) then
-			Q.quora[guild_id].meeting_in_progress = false
-			Q.quora[guild_id].vote_in_progress = false
-			Q.quora[guild_id].chair = "N/A"
-			Q.quora[guild_id].speaker = "N/A"
-			Q.quora[guild_id].move = 0
-			Q.quora[guild_id].motion_body = message
-		elseif ( string.find( message, "MEETING IS IN RECESS." ) ) then
-			Q.quora[guild_id].meeting_in_progress = false
-			Q.quora[guild_id].vote_in_progress = false
-			Q.quora[guild_id].chair = "N/A"
-			Q.quora[guild_id].speaker = "N/A"
-			Q.quora[guild_id].move = 0
-			Q.quora[guild_id].motion_body = message
-		elseif ( string.find( message, "I MOVE THAT|MOTION TO" ) ) then
-			Q.quora[guild_id].motion_body = message
-		end
 
-	end
+		end
 
 		if ( guild_id == Q.active_guild ) then
 			if ( Q.account_name == tostring( Q.quora[guild_id].speaker ) ) then
@@ -533,5 +544,5 @@ end
 --
 
 Q.init()
-Q.AddSlashCommands()
-EVENT_MANAGER:RegisterForEvent("Quorum", EVENT_CHAT_MESSAGE_CHANNEL, Q.OnMessageReceived)
+Q.add_slash_commands()
+EVENT_MANAGER:RegisterForEvent("Quorum", EVENT_CHAT_MESSAGE_CHANNEL, Q.on_message_received)
