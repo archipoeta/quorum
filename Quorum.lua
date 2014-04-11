@@ -8,7 +8,7 @@
 if ( Q == nil ) then Q = {} end
 local wm = WINDOW_MANAGER
 
-Q.version = "1.0.4"
+Q.version = "1.0.6"
 
 function Q.init()
 	Q.account_name = GetDisplayName()
@@ -54,6 +54,7 @@ function Q.init()
 				player_rank = rank,
 				notify_text = "No Meeting.",
 				floor_queue = {},
+				recruit_msg = "",
 			}
 		end
 	end
@@ -79,36 +80,42 @@ function Q.add_slash_commands()
 	SLASH_COMMANDS["/ginvite"]		= function (extra) Q.guild_invite( Q.active_guild, extra) end
 	SLASH_COMMANDS["/gkick"]		= function (extra) Q.guild_remove( Q.active_guild, extra) end
 	SLASH_COMMANDS["/gpromote"]		= function (extra) Q.guild_promote( Q.active_guild, extra) end
+	SLASH_COMMANDS["/grecruit"]		= function (extra) Q.guild_recruit( Q.active_guild, extra) end
 	SLASH_COMMANDS["/gquit"]		= function (extra) Q.guild_leave( Q.active_guild ) end
 
 	SLASH_COMMANDS["/g1demote"]		= function (extra) Q.guild_demote( 1, extra) end
 	SLASH_COMMANDS["/g1invite"]		= function (extra) Q.guild_invite( 1, extra) end
 	SLASH_COMMANDS["/g1kick"]		= function (extra) Q.guild_remove( 1, extra) end
 	SLASH_COMMANDS["/g1promote"]	= function (extra) Q.guild_promote( 1, extra) end
+	SLASH_COMMANDS["/g1recruit"]	= function (extra) Q.guild_recruit( 1, extra) end
 	SLASH_COMMANDS["/g1quit"]		= function (extra) Q.guild_leave( 1 ) end
 	
 	SLASH_COMMANDS["/g2demote"]		= function (extra) Q.guild_demote( 2, extra) end
 	SLASH_COMMANDS["/g2invite"]		= function (extra) Q.guild_invite( 2, extra) end
 	SLASH_COMMANDS["/g2kick"]		= function (extra) Q.guild_remove( 2, extra) end
 	SLASH_COMMANDS["/g2promote"]	= function (extra) Q.guild_promote( 2, extra) end
+	SLASH_COMMANDS["/g2recruit"]	= function (extra) Q.guild_recruit( 2, extra) end	
 	SLASH_COMMANDS["/g2quit"]		= function (extra) Q.guild_leave( 2 ) end
 	
 	SLASH_COMMANDS["/g3demote"]		= function (extra) Q.guild_demote( 3, extra) end
 	SLASH_COMMANDS["/g3invite"]		= function (extra) Q.guild_invite( 3, extra) end
 	SLASH_COMMANDS["/g3kick"]		= function (extra) Q.guild_remove( 3, extra) end
 	SLASH_COMMANDS["/g3promote"]	= function (extra) Q.guild_promote( 3, extra) end
+	SLASH_COMMANDS["/g3recruit"]	= function (extra) Q.guild_recruit( 3, extra) end	
 	SLASH_COMMANDS["/g3quit"]		= function (extra) Q.guild_leave( 3 ) end
 	
 	SLASH_COMMANDS["/g4demote"]		= function (extra) Q.guild_demote( 4, extra) end
 	SLASH_COMMANDS["/g4invite"]		= function (extra) Q.guild_invite( 4, extra) end
 	SLASH_COMMANDS["/g4kick"]		= function (extra) Q.guild_remove( 4, extra) end
 	SLASH_COMMANDS["/g4promote"]	= function (extra) Q.guild_promote( 4, extra) end
+	SLASH_COMMANDS["/g4recruit"]	= function (extra) Q.guild_recruit( 4, extra) end	
 	SLASH_COMMANDS["/g4quit"]		= function (extra) Q.guild_leave( 4 ) end
 	
 	SLASH_COMMANDS["/g5demote"]		= function (extra) Q.guild_demote( 5, extra) end
 	SLASH_COMMANDS["/g5invite"]		= function (extra) Q.guild_invite( 5, extra) end
-	SLASH_COMMANDS["/g5kick"]		= function (extra) Q.guild_remove( 5, extra) end	
+	SLASH_COMMANDS["/g5kick"]		= function (extra) Q.guild_remove( 5, extra) end
 	SLASH_COMMANDS["/g5promote"]	= function (extra) Q.guild_promote( 5, extra) end
+	SLASH_COMMANDS["/g5recruit"]	= function (extra) Q.guild_recruit( 5, extra) end
 	SLASH_COMMANDS["/g5quit"]		= function (extra) Q.guild_leave( 5 ) end
 
 end
@@ -152,6 +159,14 @@ function Q.guild_promote( guild, player )
 		return d("Please provide the name of a guild member to promote.")
 	else
 		GuildPromote( guild, tostring(player) )
+	end
+end
+
+function Q.guild_recruit( guild, message )
+	if ( message == nil or message == "" ) then
+		ZO_ChatWindowTextEntryEditBox:SetText( Q.quora[ guild ].recruit_msg )
+	else
+		Q.quora[ guild ].recruit_msg = tostring(message)
 	end
 end
 
