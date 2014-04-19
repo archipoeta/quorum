@@ -1,69 +1,95 @@
 <GuiXml>
 	<Controls>
 		<TopLevelControl name="Quorum" mouseEnabled="true" movable="true">
-			<Dimensions x="360" y="300" />
+			<Dimensions x="600" y="500" />
 			<Anchor point="CENTER" />
-			<OnInitialized>
-				Q.show_summary()			
-			</OnInitialized>
 			<Controls>
 				<Backdrop name="$(parent)BG" inherits="ZO_DefaultBackdrop" />
 				<Label name="QClose" text="[x]" verticalAlignment="TOP" font="ZoFontGame" color="CFDCBD" mouseEnabled="true">
-					<Anchor offsetX="340" offsetY="0" />
+					<Anchor offsetX="580" offsetY="0" />
 					<OnMouseEnter>
-						Q.element_hover_on(QClose, Q.close_hover_color)
+						Q.element_hover_on(QClose, Q.saved.close_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.element_hover_off(QClose, Q.default_color)
+						Q.element_hover_off(QClose, Q.saved.default_color)
 					</OnMouseExit>
 					<OnMouseDown>
-						Quorum:SetHidden(true)
-						Quorum.hidden = true
+						Q.toggle_addon_visible(false)
 					</OnMouseDown>
 				</Label>
 				<Label name="Title" text="Quorum" verticalAlignment="TOP" font="ZoFontWindowTitle" color="CFDCBD" mouseEnabled="true">
 					<Anchor offsetX="2" offsetY="0" />
 					<OnMouseEnter>
-						Q.element_hover_on(Title, Q.title_hover_color)
+						Q.element_hover_on(Title, Q.saved.title_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.element_hover_off(Title, Q.default_color)
+						Q.element_hover_off(Title, Q.saved.default_color)
 					</OnMouseExit>
 					<OnMouseDown>
 						Q.show_summary()
 					</OnMouseDown>
 				</Label>
+
+				<Label name="Tooltip" text="" verticalAlignment="TOP" font="ZoFontGame" color="CFDCBD" hidden="true">
+					<Anchor offsetX="100" offsetY="100" />
+					<Dimensions x="0" y="0" />
+					<Controls>
+						<Backdrop name="TooltipBG" inherits="ZO_DefaultBackdrop" />
+					</Controls>
+				</Label>
 				
-				<Button name="ReqSpeaker" inherits="ZO_DefaultButton" text="Speak" mouseEnabled="true" color="FFDDDD">
-					<Anchor offsetX="130" offsetY="5" />
-					<OnMouseDown>
-						Q.handle_motion( "Stand to Speak", "*SEEKS RECOGNITION OF THE CHAIR*" )
-					</OnMouseDown>
-				</Button>				
-				
-				<Label name="Section0" text="Motions: " verticalAlignment="CENTER" font="ZoFontGame" color="CFDCBD" mouseEnabled="true">
-					<Anchor offsetX="285" offsetY="45" />
-					<OnMouseEnter>
-						Q.element_hover_on(Section0, Q.title_hover_color)
-					</OnMouseEnter>
-					<OnMouseExit>
-						Q.element_hover_off(Section0, Q.default_color)
-					</OnMouseExit>
+				<Button name="Guild_Tab" inherits="ZO_DefaultButton" text="Guild" mouseEnabled="true">
+					<Anchor offsetX="0" offsetY="40" />
 					<OnMouseDown>
 						Q.show_summary()
 					</OnMouseDown>
+				</Button>
+				<Button name="Meeting_Tab" inherits="ZO_DefaultButton" text="Meeting" mouseEnabled="true">
+					<Anchor offsetX="110" offsetY="40" />
+					<OnMouseDown>
+						Q.show_map_step( Q.saved.quora[ Q.saved.active_guild ].move )
+					</OnMouseDown>
+				</Button>
+				<Button name="Help_Tab" inherits="ZO_DefaultButton" text="Help" mouseEnabled="true">
+					<Anchor offsetX="220" offsetY="40" />
+					<OnMouseDown>
+						Q.show_main_motions()
+					</OnMouseDown>
+				</Button>
+				<Button name="About_Tab" inherits="ZO_DefaultButton" text="About" mouseEnabled="true">
+					<Anchor offsetX="330" offsetY="40" />
+					<OnMouseDown>
+						Q.show_map_step('about')
+					</OnMouseDown>
+				</Button>
+				<Label name="Incidentals" text="Interrupt! >>" verticalAlignment="BOTTOM" font="ZoFontGame" color="FF6666" hidden="true">
+					<Anchor offsetX="5" offsetY="455" />
 				</Label>
 				<Label name="Notify" text="" verticalAlignment="BOTTOM" font="ZoFontGame" color="CFDCBD">
-					<Anchor offsetX="5" offsetY="280" />
-				</Label>				
+					<Anchor offsetX="5" offsetY="480" />
+				</Label>
 
+
+<!--				
+				<Label name="Section0" text="Summary" verticalAlignment="CENTER" font="ZoFontGame" color="CFDCBD" mouseEnabled="true">
+					<Anchor offsetX="285" offsetY="45" />
+					<OnMouseEnter>
+						Q.element_hover_on(Section0, Q.saved.title_hover_color)
+					</OnMouseEnter>
+					<OnMouseExit>
+						Q.element_hover_off(Section0, Q.saved.default_color)
+					</OnMouseExit>
+					<OnMouseDown>
+						Q.show_summary()
+					</OnMouseDown>
+				</Label>
 				<Label name="Section1" text="Main" verticalAlignment="CENTER" font="ZoFontGame" color="FFDDFF" mouseEnabled="true">
 					<Anchor offsetX="300" offsetY="69" />
 					<OnMouseEnter>
-						Q.element_hover_on(Section1, Q.tab_hover_color)
+						Q.element_hover_on(Section1, Q.saved.tab_hover_color)
 					</OnMouseEnter>
 					<OnMouseExit>
-						Q.element_hover_off(Section1, Q.tab_colors[1])
+						Q.element_hover_off(Section1, Q.saved.tab_colors[1])
 					</OnMouseExit>
 					<OnMouseDown>
 						Q.show_main_motions()
@@ -166,7 +192,8 @@
 					<OnMouseDown>
 						Q.show_chair_answers()
 					</OnMouseDown>
-				</Label>				
+				</Label>
+-->				
 				
 				<EditBox name="$(parent)MotionBody" inherits="ZO_DefaultEditMultiLineForBackdrop" font="ZoFontGame" color="CFDCBD" wrapMode="ELLIPSIS" editEnabled="true" multiLine="true" hidden="true">
 					<Dimensions x="280" y="200" />
@@ -178,19 +205,7 @@
 				<Label name="$(parent)MotionBodyCANCEL" font="ZoFontGame" color="FF5555" wrapMode="ELLIPSIS" verticalAlignment="BOTTOM" horizontalAlignment="RIGHT" text="Cancel" hidden="true">
 					<Anchor offsetX="205" offsetY="225" />
 				</Label>
-				
-				<Label name="$(parent)About" font="ZoFontGame" color="CFDCBD" wrapMode="ELLIPSIS" verticalAlignment="BOTTOM" horizontalAlignment="RIGHT" text="[a]" mouseEnabled="true">
-					<Anchor offsetX="320" offsetY="0" />
-					<OnMouseEnter>
-						Q.element_hover_on(QuorumAbout, Q.tab_hover_color)
-					</OnMouseEnter>
-					<OnMouseExit>
-						Q.element_hover_off(QuorumAbout, Q.default_color)
-					</OnMouseExit>					
-					<OnMouseDown>
-						Q.show_help_menu()
-					</OnMouseDown>
-				</Label>
+
 			</Controls>
 		</TopLevelControl>
 	</Controls>

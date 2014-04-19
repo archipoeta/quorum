@@ -1,7 +1,12 @@
 ## Title: |cDA77FFQuorum|r
 ## Author: Archpoet
-## Version: 1.0.6
+## Version: 1.0.7
 ## APIVersion: 100003
 
-Quorum.lua
-Quorum.xml
+## SavedVariables: Quorum_SavedVariables
+
+lib/LibStub.lua
+lib/LibAddonMenu-1.0.lua
+
+lib/Quorum.lua
+xml/Quorum.xml
